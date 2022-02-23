@@ -14,8 +14,8 @@ plot = {
             TRANSITIONS: {
                 ("nlp_flow", "node_1"): cnd.regexp(r"talk about NLP", re.I),
                 ("greeting_flow", "node_1"): cnd.regexp(r"hi|hello|hey", re.I),
-                "fallback_node": cnd.true()
-            }
+                "fallback_node": cnd.true(),
+            },
         },
         "fallback_node": {
             RESPONSE: "Oops",
@@ -23,17 +23,14 @@ plot = {
                 ("nlp_flow", "node_1"): cnd.regexp(r"talk about NLP", re.I),
                 ("greeting_flow", "node_1"): cnd.regexp(r"hi|hello|hey", re.I),
                 lbl.previous(): cnd.regexp(r"previous", re.I),
-                lbl.repeat(): cnd.true()
-            }
-        }
+                lbl.repeat(): cnd.true(),
+            },
+        },
     },
     "greeting_flow": {
         "node_1": {
             RESPONSE: "Hi, how are you?",
-            TRANSITIONS: {
-                lbl.to_fallback(0.1): cnd.true(),
-                "node_2": cnd.regexp(r"how are you", re.I)
-            }
+            TRANSITIONS: {lbl.to_fallback(0.1): cnd.true(), "node_2": cnd.regexp(r"how are you", re.I)},
         },
         "node_2": {
             RESPONSE: "Great! What would you like to talk about?",
@@ -41,22 +38,17 @@ plot = {
                 lbl.to_fallback(0.1): cnd.true(),  # == ("global_flow", "fallback_node", 0.1)
                 lbl.forward(0.5): cnd.regexp(r"talk about", re.I),  # == ("greeting_flow", "node_3", 0.5)
                 ("nlp_flow", "node_1"): cnd.regexp(r"talk about NLP", re.I),
-                lbl.previous(): cnd.regexp(r"previous", re.I)
-            }
+                lbl.previous(): cnd.regexp(r"previous", re.I),
+            },
         },
         "node_3": {
             RESPONSE: "Sorry, I can not talk about music now.",
-            TRANSITIONS: {
-                lbl.forward(): cnd.regexp(r"bye")
-            }
+            TRANSITIONS: {lbl.forward(): cnd.regexp(r"bye")},
         },
         "node_4": {
             RESPONSE: "understandable, have a nice day!",
-            TRANSITIONS: {
-                "node_1": cnd.regexp(r"hi|hello|hey", re.I),
-                lbl.to_fallback(): cnd.true()
-            }
-        }
+            TRANSITIONS: {"node_1": cnd.regexp(r"hi|hello|hey", re.I), lbl.to_fallback(): cnd.true()},
+        },
     },
     "nlp_flow": {
         "node_1": {
@@ -64,34 +56,34 @@ plot = {
             TRANSITIONS: {
                 lbl.forward(): cnd.regexp(r"yes|yep|go|ok", re.I),
                 ("greeting_flow", "node_4"): cnd.regexp(r"no|nope", re.I),
-                lbl.to_fallback(): cnd.true()
-            }
+                lbl.to_fallback(): cnd.true(),
+            },
         },
         "node_2": {
             RESPONSE: "Would you like me to tell about it?",
             TRANSITIONS: {
                 lbl.forward(): cnd.regexp(r"yes|yep|go|ok", re.I),
                 ("greeting_flow", "node_4"): cnd.regexp(r"no|nope", re.I),
-                lbl.to_fallback(): cnd.true()
-            }
+                lbl.to_fallback(): cnd.true(),
+            },
         },
         "node_3": {
             RESPONSE: "The base model for this task id DialoGPT - GPT-2 based model developed by Microsoft.",
             TRANSITIONS: {
                 lbl.forward(): cnd.regexp(r"next", re.I),
                 lbl.repeat(): cnd.regexp(r"repeat", re.I),
-                lbl.to_fallback(): cnd.true()
-            }
+                lbl.to_fallback(): cnd.true(),
+            },
         },
         "node_4": {
             RESPONSE: "There are different approaches to accomplish this task, including prompt tuning and inverse "
-                      "prompting.",
+            "prompting.",
             TRANSITIONS: {
                 lbl.forward(): cnd.regexp(r"next", re.I),
                 lbl.repeat(): cnd.regexp(r"repeat", re.I),
                 lbl.backward(): cnd.regexp(r"back", re.I),
-                lbl.to_fallback(): cnd.true()
-            }
+                lbl.to_fallback(): cnd.true(),
+            },
         },
         "node_5": {
             RESPONSE: "You can also use Plug'n'Play model as a simpler method.",
@@ -99,8 +91,8 @@ plot = {
                 lbl.forward(): cnd.regexp(r"next", re.I),
                 lbl.repeat(): cnd.regexp(r"repeat", re.I),
                 lbl.backward(): cnd.regexp(r"back", re.I),
-                lbl.to_fallback(): cnd.true()
-            }
+                lbl.to_fallback(): cnd.true(),
+            },
         },
         "node_6": {
             RESPONSE: "DailyDialog - a typical dataset on which DialoGPT is trained.",
@@ -108,18 +100,18 @@ plot = {
                 lbl.forward(): cnd.regexp(r"next", re.I),
                 lbl.repeat(): cnd.regexp(r"repeat", re.I),
                 lbl.backward(): cnd.regexp(r"back", re.I),
-                lbl.to_fallback(): cnd.true()
-            }
+                lbl.to_fallback(): cnd.true(),
+            },
         },
         "node_7": {
             RESPONSE: "Woah! That's plenty of information. I think, it's time for you to dive into details)",
             TRANSITIONS: {
                 ("greeting_flow", "node_2", 1.0): cnd.regexp(r"next", re.I),
                 ("greeting_flow", "node_4", 2.0): cnd.regexp(r"next time", re.I),
-                lbl.to_fallback(): cnd.true()
-            }
-        }
-    }
+                lbl.to_fallback(): cnd.true(),
+            },
+        },
+    },
 }
 
 actor = Actor(plot, start_label=("global_flow", "start_node"), fallback_label=("global_flow", "fallback_node"))
